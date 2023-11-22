@@ -1,0 +1,12 @@
+name: For Each
+description: Create "matrix" compliant file/folder lists using patterns
+inputs:
+  patterns:
+    description: The pattern(s) with which to match files/folders
+    required: true
+outputs:
+  matches:
+    description: The files/folders that matched the pattern
+runs:
+  using: node20
+  main: dist.js
