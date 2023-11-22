@@ -1,5 +1,6 @@
 {
   "scripts": {
+    "watch": "npm run build -- --watch=forever",
     "build": "esbuild main.mjs --bundle --platform=node --target=node20 --outfile=dist/main.js"
   },
   "dependencies": {
