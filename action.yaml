@@ -9,4 +9,4 @@ outputs:
     description: The files/folders that matched the pattern
 runs:
   using: node20
-  main: dist.js
+  main: dist/main.js
