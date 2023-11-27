@@ -12,5 +12,5 @@ jobs:
       - run: echo $OUTPUT
         env:
           OUTPUT: ${{ steps.for-each.outputs.paths }}
-      - if: steps.for-each.outputs.paths != '["fixtures/function-a", "fixtures/function-b", "fixtures/function-c", "fixtures/run-a", "fixtures/run-b"]'
+      - if: steps.for-each.outputs.paths != '["fixtures/function-a/","fixtures/function-b/","fixtures/function-c/","fixtures/run-a/","fixtures/run-b/"]'
         run: exit 1
