@@ -10,5 +10,5 @@ import { globby } from 'globby';
     markDirectories: true,
     onlyFiles: false,
   });
-  console.log({ paths, patterns });
+  core.setOutput('paths', paths);
 })();
