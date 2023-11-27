@@ -31,3 +31,20 @@ jobs:
           OUTPUT: ${{ steps.for-each.outputs.paths }}
       - if: steps.for-each.outputs.paths != '["fixtures/function-a/","fixtures/function-c/","fixtures/run-a/"]'
         run: exit 1
+
+  multiple-files:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      - name: Run colpal/actions-for-each
+        id: for-each
+        uses: ./
+        with:
+          patterns: |
+            fixtures/**/file.txt
+            !fixtures/function-*
+      - run: echo $OUTPUT
+        env:
+          OUTPUT: ${{ steps.for-each.outputs.paths }}
+      - if: steps.for-each.outputs.paths != '["fixtures/run-a/file.txt","fixtures/run-b/file.txt"]'
+        run: exit 1
