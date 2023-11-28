@@ -19,7 +19,7 @@ steps:
     # └── other-folder
     #     └── file.txt
   - id: for-each
-    uses: colpal/actions-for-each
+    uses: colpal/actions-for-each@v0.1
     with:
       patterns: |
         **/file.txt
@@ -47,7 +47,7 @@ jobs:
         #     ├── main.js
         #     └── deploy.sh
       - id: for-each
-        uses: colpal/actions-for-each
+        uses: colpal/actions-for-each@v0.1
         with:
           patterns: 'function-*'
     outputs:
@@ -73,7 +73,7 @@ For more details on the supported patterns, see
 ```yaml
 steps:
   - id: for-each
-    uses: colpal/actions-for-each
+    uses: colpal/actions-for-each@v0.1
     with:
       # REQUIRED
       # The pattern(s) to be used to find folders/files. More than one pattern
