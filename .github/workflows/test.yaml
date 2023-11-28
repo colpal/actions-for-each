@@ -48,3 +48,25 @@ jobs:
           OUTPUT: ${{ steps.for-each.outputs.paths }}
       - if: steps.for-each.outputs.paths != '["fixtures/run-a/file.txt","fixtures/run-b/file.txt"]'
         run: exit 1
+
+  parallel-start:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      - name: Run colpal/actions-for-each
+        id: for-each
+        uses: ./
+        with:
+          patterns: 'fixtures/*'
+      - run: echo $OUTPUT
+        env:
+          OUTPUT: ${{ steps.for-each.outputs.paths }}
+
+  parallel-end:
+    needs: parallel-start
+    runs-on: ubuntu-latest
+    strategy:
+      matrix: ${{ fromJSON(needs.parallel-start.outputs.paths) }}
+    steps:
+      - uses: actions/checkout@v3
+      - run: cat ${{ matrix.paths }}file.txt
