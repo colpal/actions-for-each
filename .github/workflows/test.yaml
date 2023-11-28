@@ -1,4 +1,10 @@
-on: push
+on:
+  push:
+    paths:
+      - '.github/workflows/test.yaml'
+      - 'dist/main.js'
+      - 'fixtures/**'
+
 jobs:
   main:
     runs-on: ubuntu-latest
