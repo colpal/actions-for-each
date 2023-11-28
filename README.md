@@ -4,7 +4,7 @@ Glob the filesystem to create `matrix` definitions for parallel jobs
 
 ## Usage
 
-## Simple
+### Simple
 
 ```yaml
 steps:
