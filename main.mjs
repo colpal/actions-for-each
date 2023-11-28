@@ -10,5 +10,6 @@ import { globby } from 'globby';
     markDirectories: true,
     onlyFiles: false,
   });
+  core.debug({ paths, patterns });
   core.setOutput('paths', paths);
 })();
