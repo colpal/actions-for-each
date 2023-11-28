@@ -47,6 +47,14 @@ jobs:
     strategy:
       matrix:
         path: ${{ fromJSON(needs.main.outputs.paths) }}
+        include:
+          - path: fixtures/run-a/
+            value: 4
+          - path: fixtures/run-b/
+            value: 5
     steps:
       - uses: actions/checkout@v3
-      - run: cat ${{ matrix.path }}file.txt
+      - run: test "$VALUE" = "$(cat $PATH)"
+        env:
+          VALUE: ${{ matrix.value }}
+          PATH: ${{ matrix.path }}file.txt
