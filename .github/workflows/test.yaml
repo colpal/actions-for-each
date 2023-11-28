@@ -51,6 +51,8 @@ jobs:
 
   parallel-start:
     runs-on: ubuntu-latest
+    outputs:
+      paths: ${{ steps.for-each.outputs.paths }}
     steps:
       - uses: actions/checkout@v3
       - name: Run colpal/actions-for-each
