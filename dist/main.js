@@ -24696,7 +24696,7 @@ var { convertPathToPattern } = import_fast_glob2.default;
     markDirectories: true,
     onlyFiles: false
   });
-  core.debug({ matches, patterns });
+  core.debug(JSON.stringify({ patterns, matches }, null, 2));
   core.setOutput("matches", matches);
 })();
 /*! Bundled license information:
