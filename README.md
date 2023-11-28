@@ -71,10 +71,15 @@ For more details on the supported patterns, see
 [here](https://github.com/sindresorhus/globby#globbing-patterns)
 
 ```yaml
-uses: colpal/actions-for-each
-with:
-  # REQUIRED
-  # The pattern(s) to be used to find folders/files. More than one pattern may
-  # be supplied by putting each on its own line.
-  patterns: string
+steps:
+  - id: for-each
+    uses: colpal/actions-for-each
+    with:
+      # REQUIRED
+      # The pattern(s) to be used to find folders/files. More than one pattern
+      # may be supplied by putting each on its own line.
+      patterns: string
+outputs:
+  # An JSON-formatted array of paths that matched the pattern(s)
+  matches: ${{ steps.for-each.outputs.matches }}
 ```
