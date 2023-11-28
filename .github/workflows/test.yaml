@@ -42,7 +42,7 @@ jobs:
         with:
           patterns: |
             fixtures/**/file.txt
-            !fixtures/function-*
+            !fixtures/function-*/**
       - run: echo $OUTPUT
         env:
           OUTPUT: ${{ steps.for-each.outputs.paths }}
