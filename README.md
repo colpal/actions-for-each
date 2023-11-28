@@ -75,6 +75,6 @@ uses: colpal/actions-for-each
 with:
   # REQUIRED
   # The pattern(s) to be used to find folders/files. More than one pattern may
-  # supplied by putting each on its own line.
+  # be supplied by putting each on its own line.
   patterns: string
 ```
