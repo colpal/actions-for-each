@@ -64,3 +64,17 @@ jobs:
       - run: ./deploy.sh
         working-directory: ${{ matrix.path }}
 ```
+
+## Reference
+
+For more details on the supported patterns, see
+[here](https://github.com/sindresorhus/globby#globbing-patterns)
+
+```yaml
+uses: colpal/actions-for-each
+with:
+  # REQUIRED
+  # The pattern(s) to be used to find folders/files. More than one pattern may
+  # supplied by putting each on its own line.
+  patterns: string
+```
