@@ -1,6 +1,7 @@
 # For Each
 
-Glob the filesystem to create `matrix` definitions for parallel jobs
+Glob the filesystem to create `matrix` definitions for parallel jobs. This
+action uses [globby](https://github.com/sindresorhus/globby) under the hood
 
 ## Usage
 
