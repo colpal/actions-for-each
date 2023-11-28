@@ -54,7 +54,7 @@ jobs:
             value: 5
     steps:
       - uses: actions/checkout@v3
-      - run: test "$VALUE" = "$(cat $PATH)"
+      - run: test "$VALUE" = "$(cat $FILE)"
         env:
           VALUE: ${{ matrix.value }}
-          PATH: ${{ matrix.path }}file.txt
+          FILE: ${{ matrix.path }}file.txt
