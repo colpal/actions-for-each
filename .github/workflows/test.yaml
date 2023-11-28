@@ -11,7 +11,7 @@ jobs:
     outputs:
       matches: ${{ steps.for-each-4.outputs.matches }}
     steps:
-      - uses: actions/checkout@v3
+      - uses: actions/checkout@v4
 
       - name: Run colpal/actions-for-each
         id: for-each-1
@@ -59,7 +59,7 @@ jobs:
           - path: fixtures/run-b/
             value: 5
     steps:
-      - uses: actions/checkout@v3
+      - uses: actions/checkout@v4
       - run: test "$VALUE" = "$(cat $FILE)"
         env:
           VALUE: ${{ matrix.value }}
