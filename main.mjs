@@ -4,12 +4,12 @@ import { globby } from 'globby';
 
 (async () => {
   const patterns = core.getMultilineInput('patterns', { required: true });
-  const paths = await globby(patterns, {
+  const matches = await globby(patterns, {
     expandDirectories: false,
     gitignore: true,
     markDirectories: true,
     onlyFiles: false,
   });
-  core.debug({ paths, patterns });
-  core.setOutput('paths', paths);
+  core.debug({ matches, patterns });
+  core.setOutput('matches', matches);
 })();
