@@ -24693,7 +24693,7 @@ function isEmpty(xs) {
 }
 function getInputs() {
   const patterns = core.getMultilineInput("patterns");
-  const rootPatterns = core.getMultilineInput("rootPatterns");
+  const rootPatterns = core.getMultilineInput("root-patterns");
   if (isEmpty(patterns) && isEmpty(rootPatterns)) {
     throw new Error('Either "patterns" or "root-patterns" must be provided');
   }
