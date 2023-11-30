@@ -72,6 +72,17 @@ jobs:
         run: exit 1
 
       - name: Run colpal/actions-for-each
+        id: for-each-7
+        uses: ./
+        with:
+          root-patterns: |
+            ./
+          filter-patterns: |
+            **/flie.txt
+      - if: steps.for-each-7.outputs.matches != '[]'
+        run: exit 1
+
+      - name: Run colpal/actions-for-each
         id: for-each
         uses: ./
         with:
