@@ -21,13 +21,17 @@ function getInputs() {
   return { patterns, rootPatterns, filterPatterns };
 }
 
-async function directMatch(patterns) {
-  const matches = await globby(patterns, {
+async function fsGlob(patterns) {
+  return globby(patterns, {
     expandDirectories: false,
     gitignore: true,
     markDirectories: true,
     onlyFiles: false,
   });
+}
+
+async function directMatch(patterns) {
+  const matches = await fsGlob(patterns);
   core.debug(JSON.stringify({ patterns, matches }, null, 2));
   core.setOutput('matches', matches);
 }
