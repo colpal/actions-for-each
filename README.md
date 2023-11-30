@@ -75,10 +75,35 @@ steps:
   - id: for-each
     uses: colpal/actions-for-each@v0.1
     with:
-      # REQUIRED
+      # REQUIRED (if `root-patterns` is not specified)
       # The pattern(s) to be used to find folders/files. More than one pattern
       # may be supplied by putting each on its own line.
-      patterns: string
+      patterns: single-line string | multi-line string
+
+      # OPTIONAL (only valid if `root-patterns` is specified)
+      # DEFAULT = **
+      # The pattern(s) to be used to find files/folders to provide to
+      # `root-patterns` (see the description of `root-patterns` for more
+      # details)
+      filter-patterns: single-line string | multi-line string
+
+      # REQUIRED (if `patterns` is not specified)
+      # The pattern(s) to be used to "hoist" files/folders matched by
+      # `filter-patterns`. The process is as follows:
+      #   1. `filter-patterns` is applied to the filesystem to create a list
+      #      of paths (similar to what `patterns` does when specified alone)
+      #   2. `root-patterns` is then applied to the paths from the previous
+      #      step. Any paths that match will be added to the `matches` output.
+      #   3. `dirname` will be applied to all paths from step 2 that DID NOT
+      #      match `root-patterns`, effectively removing the last segment of
+      #      the path. For example:
+      #        `folder-a/subfolder-a/file-a` becomes `folder-a/subfolder-a/`
+      #        `folder-a/subfolder-a/`       becomes `folder-a/`
+      #        `folder-a/`                   becomes `./`
+      #        `./`                          becomes `./`
+      #   4. Repeat steps 2 - 4 until the only unmatched paths are "./"
+      #   5. `matches` is set as an output of the action
+      root-patterns: single-line string | multi-line string
 outputs:
   # An JSON-formatted array of paths that matched the pattern(s)
   matches: ${{ steps.for-each.outputs.matches }}
