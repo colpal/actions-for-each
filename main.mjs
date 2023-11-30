@@ -64,13 +64,14 @@ async function hoistMatch(rootPatterns, filterPatterns) {
 }
 
 (async () => {
-  const { patterns, rootPatterns } = getInputs();
+  const { filterPatterns, patterns, rootPatterns } = getInputs();
   switch (true) {
     case !isEmpty(patterns):
       directMatch(patterns);
       break;
     case !isEmpty(rootPatterns):
-      throw new Error('Not implemented');
+      hoistMatch(rootPatterns, filterPatterns);
+      break;
     default:
       throw new Error('Unreachable');
   }

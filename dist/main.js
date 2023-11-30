@@ -24332,6 +24332,7 @@ var require_ignore = __commonJS({
 });
 
 // main.mjs
+var import_path = require("path");
 var core = __toESM(require_core(), 1);
 
 // node_modules/globby/index.js
@@ -24719,14 +24720,35 @@ async function directMatch(patterns) {
   core.debug(JSON.stringify({ patterns, matches }, null, 2));
   core.setOutput("matches", matches);
 }
+function hoist(rootPatterns, paths) {
+  const roots = [];
+  let remaining = [...paths, "./"];
+  do {
+    roots.push(...(0, import_micromatch.default)(remaining, rootPatterns));
+    remaining = import_micromatch.default.not(remaining, rootPatterns).map((x) => `${(0, import_path.dirname)(x)}/`).filter((x) => x !== "./");
+  } while (remaining.length > 0);
+  return Array.from(new Set(roots));
+}
+async function hoistMatch(rootPatterns, filterPatterns) {
+  const fromFilters = await fsGlob(filterPatterns);
+  const matches = hoist(rootPatterns, fromFilters);
+  core.debug(JSON.stringify({
+    rootPatterns,
+    filterPatterns,
+    fromFilters,
+    matches
+  }, null, 2));
+  core.setOutput("matches", matches);
+}
 (async () => {
-  const { patterns, rootPatterns } = getInputs();
+  const { filterPatterns, patterns, rootPatterns } = getInputs();
   switch (true) {
     case !isEmpty(patterns):
       directMatch(patterns);
       break;
     case !isEmpty(rootPatterns):
-      throw new Error("Not implemented");
+      hoistMatch(rootPatterns, filterPatterns);
+      break;
     default:
       throw new Error("Unreachable");
   }
