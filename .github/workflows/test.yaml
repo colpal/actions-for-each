@@ -51,6 +51,17 @@ jobs:
         run: exit 1
 
       - name: Run colpal/actions-for-each
+        id: for-each-5
+        uses: ./
+        with:
+          root-patterns: |
+            ./
+            **/
+          filter-patterns: '**/main.*'
+      - if: steps.for-each-5.outputs.matches != '[]'
+        run: exit 1
+
+      - name: Run colpal/actions-for-each
         id: for-each
         uses: ./
         with:
