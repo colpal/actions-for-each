@@ -3,7 +3,14 @@ description: Create "matrix" compliant file/folder lists using patterns
 inputs:
   patterns:
     description: The pattern(s) with which to match files/folders
-    required: true
+  root-patterns:
+    description: >
+      The pattern(s) to which all files/folders matched by `filter-patterns`
+      will be hoisted
+  filter-patterns:
+    description: >
+      The pattern(s) that will be used to filter (but not match) files/folders
+    default: '**'
 outputs:
   matches:
     description: The files/folders that matched the pattern

@@ -9,7 +9,7 @@ jobs:
   main:
     runs-on: ubuntu-latest
     outputs:
-      matches: ${{ steps.for-each-4.outputs.matches }}
+      matches: ${{ steps.for-each.outputs.matches }}
     steps:
       - uses: actions/checkout@v4
 
@@ -43,6 +43,47 @@ jobs:
 
       - name: Run colpal/actions-for-each
         id: for-each-4
+        uses: ./
+        with:
+          root-patterns: '*/'
+          filter-patterns: '**/main.*'
+      - if: steps.for-each-4.outputs.matches != '["dist/"]'
+        run: exit 1
+
+      - name: Run colpal/actions-for-each
+        id: for-each-5
+        uses: ./
+        with:
+          root-patterns: |
+            ./
+            **/
+          filter-patterns: '**/main.*'
+      - if: steps.for-each-5.outputs.matches != '["./","dist/"]'
+        run: exit 1
+
+      - name: Run colpal/actions-for-each
+        id: for-each-6
+        uses: ./
+        with:
+          root-patterns: |
+            **/*-b/
+          filter-patterns: '**/file.txt'
+      - if: steps.for-each-6.outputs.matches != '["fixtures/function-b/","fixtures/run-b/"]'
+        run: exit 1
+
+      - name: Run colpal/actions-for-each
+        id: for-each-7
+        uses: ./
+        with:
+          root-patterns: |
+            ./
+          filter-patterns: |
+            **/flie.txt
+      - if: steps.for-each-7.outputs.matches != '[]'
+        run: exit 1
+
+      - name: Run colpal/actions-for-each
+        id: for-each
         uses: ./
         with:
           patterns: 'fixtures/run-*'

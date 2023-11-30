@@ -21420,7 +21420,7 @@ var require_micromatch = __commonJS({
     var picomatch = require_picomatch2();
     var utils = require_utils4();
     var isEmptyString = (val) => val === "" || val === "./";
-    var micromatch = (list, patterns, options) => {
+    var micromatch2 = (list, patterns, options) => {
       patterns = [].concat(patterns);
       list = [].concat(list);
       let omit = /* @__PURE__ */ new Set();
@@ -21463,11 +21463,11 @@ var require_micromatch = __commonJS({
       }
       return matches;
     };
-    micromatch.match = micromatch;
-    micromatch.matcher = (pattern, options) => picomatch(pattern, options);
-    micromatch.isMatch = (str, patterns, options) => picomatch(patterns, options)(str);
-    micromatch.any = micromatch.isMatch;
-    micromatch.not = (list, patterns, options = {}) => {
+    micromatch2.match = micromatch2;
+    micromatch2.matcher = (pattern, options) => picomatch(pattern, options);
+    micromatch2.isMatch = (str, patterns, options) => picomatch(patterns, options)(str);
+    micromatch2.any = micromatch2.isMatch;
+    micromatch2.not = (list, patterns, options = {}) => {
       patterns = [].concat(patterns).map(String);
       let result = /* @__PURE__ */ new Set();
       let items = [];
@@ -21476,7 +21476,7 @@ var require_micromatch = __commonJS({
           options.onResult(state);
         items.push(state.output);
       };
-      let matches = new Set(micromatch(list, patterns, { ...options, onResult }));
+      let matches = new Set(micromatch2(list, patterns, { ...options, onResult }));
       for (let item of items) {
         if (!matches.has(item)) {
           result.add(item);
@@ -21484,12 +21484,12 @@ var require_micromatch = __commonJS({
       }
       return [...result];
     };
-    micromatch.contains = (str, pattern, options) => {
+    micromatch2.contains = (str, pattern, options) => {
       if (typeof str !== "string") {
         throw new TypeError(`Expected a string: "${util.inspect(str)}"`);
       }
       if (Array.isArray(pattern)) {
-        return pattern.some((p) => micromatch.contains(str, p, options));
+        return pattern.some((p) => micromatch2.contains(str, p, options));
       }
       if (typeof pattern === "string") {
         if (isEmptyString(str) || isEmptyString(pattern)) {
@@ -21499,19 +21499,19 @@ var require_micromatch = __commonJS({
           return true;
         }
       }
-      return micromatch.isMatch(str, pattern, { ...options, contains: true });
+      return micromatch2.isMatch(str, pattern, { ...options, contains: true });
     };
-    micromatch.matchKeys = (obj, patterns, options) => {
+    micromatch2.matchKeys = (obj, patterns, options) => {
       if (!utils.isObject(obj)) {
         throw new TypeError("Expected the first argument to be an object");
       }
-      let keys = micromatch(Object.keys(obj), patterns, options);
+      let keys = micromatch2(Object.keys(obj), patterns, options);
       let res = {};
       for (let key of keys)
         res[key] = obj[key];
       return res;
     };
-    micromatch.some = (list, patterns, options) => {
+    micromatch2.some = (list, patterns, options) => {
       let items = [].concat(list);
       for (let pattern of [].concat(patterns)) {
         let isMatch = picomatch(String(pattern), options);
@@ -21521,7 +21521,7 @@ var require_micromatch = __commonJS({
       }
       return false;
     };
-    micromatch.every = (list, patterns, options) => {
+    micromatch2.every = (list, patterns, options) => {
       let items = [].concat(list);
       for (let pattern of [].concat(patterns)) {
         let isMatch = picomatch(String(pattern), options);
@@ -21531,13 +21531,13 @@ var require_micromatch = __commonJS({
       }
       return true;
     };
-    micromatch.all = (str, patterns, options) => {
+    micromatch2.all = (str, patterns, options) => {
       if (typeof str !== "string") {
         throw new TypeError(`Expected a string: "${util.inspect(str)}"`);
       }
       return [].concat(patterns).every((p) => picomatch(p, options)(str));
     };
-    micromatch.capture = (glob, input, options) => {
+    micromatch2.capture = (glob, input, options) => {
       let posix = utils.isWindows(options);
       let regex = picomatch.makeRe(String(glob), { ...options, capture: true });
       let match = regex.exec(posix ? utils.toPosixSlashes(input) : input);
@@ -21545,9 +21545,9 @@ var require_micromatch = __commonJS({
         return match.slice(1).map((v) => v === void 0 ? "" : v);
       }
     };
-    micromatch.makeRe = (...args) => picomatch.makeRe(...args);
-    micromatch.scan = (...args) => picomatch.scan(...args);
-    micromatch.parse = (patterns, options) => {
+    micromatch2.makeRe = (...args) => picomatch.makeRe(...args);
+    micromatch2.scan = (...args) => picomatch.scan(...args);
+    micromatch2.parse = (patterns, options) => {
       let res = [];
       for (let pattern of [].concat(patterns || [])) {
         for (let str of braces(String(pattern), options)) {
@@ -21556,7 +21556,7 @@ var require_micromatch = __commonJS({
       }
       return res;
     };
-    micromatch.braces = (pattern, options) => {
+    micromatch2.braces = (pattern, options) => {
       if (typeof pattern !== "string")
         throw new TypeError("Expected a string");
       if (options && options.nobrace === true || !/\{.*\}/.test(pattern)) {
@@ -21564,12 +21564,12 @@ var require_micromatch = __commonJS({
       }
       return braces(pattern, options);
     };
-    micromatch.braceExpand = (pattern, options) => {
+    micromatch2.braceExpand = (pattern, options) => {
       if (typeof pattern !== "string")
         throw new TypeError("Expected a string");
-      return micromatch.braces(pattern, { ...options, expand: true });
+      return micromatch2.braces(pattern, { ...options, expand: true });
     };
-    module2.exports = micromatch;
+    module2.exports = micromatch2;
   }
 });
 
@@ -21581,7 +21581,7 @@ var require_pattern = __commonJS({
     exports.removeDuplicateSlashes = exports.matchAny = exports.convertPatternsToRe = exports.makeRe = exports.getPatternParts = exports.expandBraceExpansion = exports.expandPatternsWithBraceExpansion = exports.isAffectDepthOfReadingPattern = exports.endsWithSlashGlobStar = exports.hasGlobStar = exports.getBaseDirectory = exports.isPatternRelatedToParentDirectory = exports.getPatternsOutsideCurrentDirectory = exports.getPatternsInsideCurrentDirectory = exports.getPositivePatterns = exports.getNegativePatterns = exports.isPositivePattern = exports.isNegativePattern = exports.convertToNegativePattern = exports.convertToPositivePattern = exports.isDynamicPattern = exports.isStaticPattern = void 0;
     var path2 = require("path");
     var globParent = require_glob_parent();
-    var micromatch = require_micromatch();
+    var micromatch2 = require_micromatch();
     var GLOBSTAR = "**";
     var ESCAPE_SYMBOL = "\\";
     var COMMON_GLOB_SYMBOLS_RE = /[*?]|^!/;
@@ -21685,13 +21685,13 @@ var require_pattern = __commonJS({
     }
     exports.expandPatternsWithBraceExpansion = expandPatternsWithBraceExpansion;
     function expandBraceExpansion(pattern) {
-      const patterns = micromatch.braces(pattern, { expand: true, nodupes: true, keepEscaping: true });
+      const patterns = micromatch2.braces(pattern, { expand: true, nodupes: true, keepEscaping: true });
       patterns.sort((a, b) => a.length - b.length);
       return patterns.filter((pattern2) => pattern2 !== "");
     }
     exports.expandBraceExpansion = expandBraceExpansion;
     function getPatternParts(pattern, options) {
-      let { parts } = micromatch.scan(pattern, Object.assign(Object.assign({}, options), { parts: true }));
+      let { parts } = micromatch2.scan(pattern, Object.assign(Object.assign({}, options), { parts: true }));
       if (parts.length === 0) {
         parts = [pattern];
       }
@@ -21703,7 +21703,7 @@ var require_pattern = __commonJS({
     }
     exports.getPatternParts = getPatternParts;
     function makeRe(pattern, options) {
-      return micromatch.makeRe(pattern, options);
+      return micromatch2.makeRe(pattern, options);
     }
     exports.makeRe = makeRe;
     function convertPatternsToRe(patterns, options) {
@@ -21873,10 +21873,10 @@ var require_string = __commonJS({
       return typeof input === "string";
     }
     exports.isString = isString;
-    function isEmpty(input) {
+    function isEmpty2(input) {
       return input === "";
     }
-    exports.isEmpty = isEmpty;
+    exports.isEmpty = isEmpty2;
   }
 });
 
@@ -24332,6 +24332,7 @@ var require_ignore = __commonJS({
 });
 
 // main.mjs
+var import_path = require("path");
 var core = __toESM(require_core(), 1);
 
 // node_modules/globby/index.js
@@ -24688,16 +24689,70 @@ var generateGlobTasksSync = normalizeArgumentsSync(generateTasksSync);
 var { convertPathToPattern } = import_fast_glob2.default;
 
 // main.mjs
-(async () => {
-  const patterns = core.getMultilineInput("patterns", { required: true });
-  const matches = await globby(patterns, {
+var import_micromatch = __toESM(require_micromatch(), 1);
+function isEmpty(xs) {
+  return xs.length === 0;
+}
+function getInputs() {
+  const patterns = core.getMultilineInput("patterns");
+  const rootPatterns = core.getMultilineInput("root-patterns");
+  if (isEmpty(patterns) && isEmpty(rootPatterns)) {
+    throw new Error('Either "patterns" or "root-patterns" must be provided');
+  }
+  if (!isEmpty(patterns) && !isEmpty(rootPatterns)) {
+    throw new Error('Only one of "patterns" or "root-patterns" can be provided');
+  }
+  const filterPatterns = core.getMultilineInput("filter-patterns", {
+    required: true
+  });
+  return { patterns, rootPatterns, filterPatterns };
+}
+async function fsGlob(patterns) {
+  return globby(patterns, {
     expandDirectories: false,
     gitignore: true,
     markDirectories: true,
     onlyFiles: false
   });
+}
+async function directMatch(patterns) {
+  const matches = await fsGlob(patterns);
   core.debug(JSON.stringify({ patterns, matches }, null, 2));
   core.setOutput("matches", matches);
+}
+function hoist(rootPatterns, paths) {
+  const roots = [];
+  let remaining = [...paths];
+  do {
+    roots.push(...(0, import_micromatch.default)(remaining, rootPatterns));
+    remaining = import_micromatch.default.not(remaining, rootPatterns).map((x) => `${(0, import_path.dirname)(x)}/`);
+  } while (remaining.filter((x) => x !== "./").length > 0);
+  roots.push(...(0, import_micromatch.default)(remaining, rootPatterns));
+  return Array.from(new Set(roots));
+}
+async function hoistMatch(rootPatterns, filterPatterns) {
+  const fromFilters = await fsGlob(filterPatterns);
+  const matches = hoist(rootPatterns, fromFilters);
+  core.debug(JSON.stringify({
+    rootPatterns,
+    filterPatterns,
+    fromFilters,
+    matches
+  }, null, 2));
+  core.setOutput("matches", matches);
+}
+(async () => {
+  const { filterPatterns, patterns, rootPatterns } = getInputs();
+  switch (true) {
+    case !isEmpty(patterns):
+      directMatch(patterns);
+      break;
+    case !isEmpty(rootPatterns):
+      hoistMatch(rootPatterns, filterPatterns);
+      break;
+    default:
+      throw new Error("Unreachable");
+  }
 })();
 /*! Bundled license information:
 
