@@ -62,6 +62,16 @@ jobs:
         run: exit 1
 
       - name: Run colpal/actions-for-each
+        id: for-each-6
+        uses: ./
+        with:
+          root-patterns: |
+            **/*-b/
+          filter-patterns: '**/file.txt'
+      - if: steps.for-each-6.outputs.matches != '["fixtures/function-b/","fixtures/run-b/"]'
+        run: exit 1
+
+      - name: Run colpal/actions-for-each
         id: for-each
         uses: ./
         with:
