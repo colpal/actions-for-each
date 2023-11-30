@@ -9,7 +9,7 @@ jobs:
   main:
     runs-on: ubuntu-latest
     outputs:
-      matches: ${{ steps.for-each-4.outputs.matches }}
+      matches: ${{ steps.for-each.outputs.matches }}
     steps:
       - uses: actions/checkout@v4
 
@@ -42,7 +42,7 @@ jobs:
         run: exit 1
 
       - name: Run colpal/actions-for-each
-        id: for-each-4
+        id: for-each
         uses: ./
         with:
           patterns: 'fixtures/run-*'
