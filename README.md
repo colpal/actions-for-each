@@ -108,3 +108,18 @@ outputs:
   # An JSON-formatted array of paths that matched the pattern(s)
   matches: ${{ steps.for-each.outputs.matches }}
 ```
+
+## Recipes
+
+### Find all folders that contain certain files
+
+```yaml
+- uses: colpal/actions-for-each@v0.1
+  with:
+    root-patterns: |
+      ./
+      **/
+    filter-patterns: |
+      **/main.sh
+      **/start.sh
+```
