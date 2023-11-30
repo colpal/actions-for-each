@@ -28,7 +28,7 @@ steps:
     # ["function-a/file.txt","function-b/file.txt"]
 ```
 
-### Parallel
+### Static Parallel
 
 ```yaml
 jobs:
