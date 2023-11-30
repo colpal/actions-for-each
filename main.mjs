@@ -51,6 +51,18 @@ function hoist(rootPatterns, paths) {
   return Array.from(new Set(roots));
 }
 
+async function hoistMatch(rootPatterns, filterPatterns) {
+  const fromFilters = await fsGlob(filterPatterns);
+  const matches = hoist(rootPatterns, fromFilters);
+  core.debug(JSON.stringify({
+    rootPatterns,
+    filterPatterns,
+    fromFilters,
+    matches,
+  }, null, 2));
+  core.setOutput('matches', matches);
+}
+
 (async () => {
   const { patterns, rootPatterns } = getInputs();
   switch (true) {
