@@ -40,14 +40,14 @@ async function directMatch(patterns) {
 
 function hoist(rootPatterns, paths) {
   const roots = [];
-  let remaining = [...paths, './'];
+  let remaining = [...paths];
   do {
     roots.push(...micromatch(remaining, rootPatterns));
     remaining = micromatch
       .not(remaining, rootPatterns)
-      .map((x) => `${dirname(x)}/`)
-      .filter((x) => x !== './');
-  } while (remaining.length > 0);
+      .map((x) => `${dirname(x)}/`);
+  } while (remaining.filter((x) => x !== './').length > 0);
+  roots.push(...micromatch(remaining, rootPatterns));
   return Array.from(new Set(roots));
 }
 

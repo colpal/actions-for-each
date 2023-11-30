@@ -24722,11 +24722,12 @@ async function directMatch(patterns) {
 }
 function hoist(rootPatterns, paths) {
   const roots = [];
-  let remaining = [...paths, "./"];
+  let remaining = [...paths];
   do {
     roots.push(...(0, import_micromatch.default)(remaining, rootPatterns));
-    remaining = import_micromatch.default.not(remaining, rootPatterns).map((x) => `${(0, import_path.dirname)(x)}/`).filter((x) => x !== "./");
-  } while (remaining.length > 0);
+    remaining = import_micromatch.default.not(remaining, rootPatterns).map((x) => `${(0, import_path.dirname)(x)}/`);
+  } while (remaining.filter((x) => x !== "./").length > 0);
+  roots.push(...(0, import_micromatch.default)(remaining, rootPatterns));
   return Array.from(new Set(roots));
 }
 async function hoistMatch(rootPatterns, filterPatterns) {
