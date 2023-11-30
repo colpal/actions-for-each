@@ -21873,10 +21873,10 @@ var require_string = __commonJS({
       return typeof input === "string";
     }
     exports.isString = isString;
-    function isEmpty(input) {
+    function isEmpty2(input) {
       return input === "";
     }
-    exports.isEmpty = isEmpty;
+    exports.isEmpty = isEmpty2;
   }
 });
 
@@ -24688,8 +24688,25 @@ var generateGlobTasksSync = normalizeArgumentsSync(generateTasksSync);
 var { convertPathToPattern } = import_fast_glob2.default;
 
 // main.mjs
+function isEmpty(xs) {
+  return xs.length === 0;
+}
+function getInputs() {
+  const patterns = core.getMultilineInput("patterns");
+  const rootPatterns = core.getMultilineInput("rootPatterns");
+  if (isEmpty(patterns) && isEmpty(rootPatterns)) {
+    throw new Error('Either "patterns" or "root-patterns" must be provided');
+  }
+  if (!isEmpty(patterns) && !isEmpty(rootPatterns)) {
+    throw new Error('Only one of "patterns" or "root-patterns" can be provided');
+  }
+  const filterPatterns = core.getMultilineInput("filter-patterns", {
+    required: true
+  });
+  return { patterns, rootPatterns, filterPatterns };
+}
 (async () => {
-  const patterns = core.getMultilineInput("patterns", { required: true });
+  const { patterns } = getInputs();
   const matches = await globby(patterns, {
     expandDirectories: false,
     gitignore: true,
