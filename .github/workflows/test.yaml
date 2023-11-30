@@ -58,7 +58,7 @@ jobs:
             ./
             **/
           filter-patterns: '**/main.*'
-      - if: steps.for-each-5.outputs.matches != '[]'
+      - if: steps.for-each-5.outputs.matches != '["./","dist/"]'
         run: exit 1
 
       - name: Run colpal/actions-for-each
