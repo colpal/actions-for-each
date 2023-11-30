@@ -24705,8 +24705,7 @@ function getInputs() {
   });
   return { patterns, rootPatterns, filterPatterns };
 }
-(async () => {
-  const { patterns } = getInputs();
+async function directMatch(patterns) {
   const matches = await globby(patterns, {
     expandDirectories: false,
     gitignore: true,
@@ -24715,6 +24714,18 @@ function getInputs() {
   });
   core.debug(JSON.stringify({ patterns, matches }, null, 2));
   core.setOutput("matches", matches);
+}
+(async () => {
+  const { patterns, rootPatterns } = getInputs();
+  switch (true) {
+    case !isEmpty(patterns):
+      directMatch(patterns);
+      break;
+    case !isEmpty(rootPatterns):
+      throw new Error("Not implemented");
+    default:
+      throw new Error("Unreachable");
+  }
 })();
 /*! Bundled license information:
 
