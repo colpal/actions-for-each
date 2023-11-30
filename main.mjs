@@ -1,6 +1,8 @@
 #!/usr/bin/env node
+import { dirname } from 'path';
 import * as core from '@actions/core';
 import { globby } from 'globby';
+import micromatch from 'micromatch';
 
 function isEmpty(xs) {
   return xs.length === 0;
@@ -34,6 +36,19 @@ async function directMatch(patterns) {
   const matches = await fsGlob(patterns);
   core.debug(JSON.stringify({ patterns, matches }, null, 2));
   core.setOutput('matches', matches);
+}
+
+function hoist(rootPatterns, paths) {
+  const roots = [];
+  let remaining = [...paths, './'];
+  do {
+    roots.push(...micromatch(remaining, rootPatterns));
+    remaining = micromatch
+      .not(remaining, rootPatterns)
+      .map((x) => `${dirname(x)}/`)
+      .filter((x) => x !== './');
+  } while (remaining.length > 0);
+  return Array.from(new Set(roots));
 }
 
 (async () => {
