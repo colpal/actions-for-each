@@ -42,6 +42,15 @@ jobs:
         run: exit 1
 
       - name: Run colpal/actions-for-each
+        id: for-each-4
+        uses: ./
+        with:
+          root-patterns: '*/'
+          filter-patterns: '**/main.*'
+      - if: steps.for-each-4.outputs.matches != '["dist/"]'
+        run: exit 1
+
+      - name: Run colpal/actions-for-each
         id: for-each
         uses: ./
         with:
