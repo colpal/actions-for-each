@@ -103,6 +103,19 @@ jobs:
         run: exit 1
 
       - name: Run colpal/actions-for-each
+        id: for-each-10
+        uses: ./
+        with:
+          root-patterns: |
+            banana
+            apple
+          filter-patterns: |
+            **/b.txt
+          source: '["banana/a.txt","banana/b.txt","apple/a.txt"]'
+      - if: steps.for-each-10.outputs.matches != '["banana/"]'
+        run: exit 1
+
+      - name: Run colpal/actions-for-each
         id: for-each
         uses: ./
         with:
