@@ -20,7 +20,21 @@ function getInputs() {
   const filterPatterns = core.getMultilineInput('filter-patterns', {
     required: true,
   });
-  return { patterns, rootPatterns, filterPatterns };
+  let source;
+  try {
+    source = JSON.parse(core.getInput('source') || '[]');
+  } catch (err) {
+    throw new Error(
+      '"source" must be a JSON-formatted array of filepaths',
+      { cause: err },
+    );
+  }
+  return {
+    patterns,
+    rootPatterns,
+    filterPatterns,
+    source,
+  };
 }
 
 async function fsGlob(patterns) {
