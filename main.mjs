@@ -46,6 +46,10 @@ async function fsGlob(patterns) {
   });
 }
 
+function memGlob(patterns, source) {
+  return micromatch(source, patterns);
+}
+
 async function directMatch(patterns) {
   const matches = await fsGlob(patterns);
   core.debug(JSON.stringify({ patterns, matches }, null, 2));
