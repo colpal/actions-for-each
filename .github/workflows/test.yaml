@@ -107,8 +107,8 @@ jobs:
         uses: ./
         with:
           root-patterns: |
-            banana
-            apple
+            banana/
+            apple/
           filter-patterns: |
             **/b.txt
           source: '["banana/a.txt","banana/b.txt","apple/a.txt"]'
