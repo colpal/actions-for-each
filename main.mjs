@@ -73,14 +73,15 @@ function hoist(rootPatterns, paths) {
   return Array.from(new Set(roots));
 }
 
-async function hoistMatch(rootPatterns, filterPatterns) {
-  const fromFilters = await fsGlob(filterPatterns);
+async function hoistMatch(rootPatterns, filterPatterns, source) {
+  const fromFilters = await glob(filterPatterns, source);
   const matches = hoist(rootPatterns, fromFilters);
   core.debug(JSON.stringify({
     rootPatterns,
     filterPatterns,
     fromFilters,
     matches,
+    source,
   }, null, 2));
   core.setOutput('matches', matches);
 }
@@ -97,7 +98,7 @@ async function hoistMatch(rootPatterns, filterPatterns) {
       directMatch(patterns, source);
       break;
     case !isEmpty(rootPatterns):
-      hoistMatch(rootPatterns, filterPatterns);
+      hoistMatch(rootPatterns, filterPatterns, source);
       break;
     default:
       throw new Error('Unreachable');
