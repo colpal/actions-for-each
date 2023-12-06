@@ -80,6 +80,13 @@ steps:
       # may be supplied by putting each on its own line.
       patterns: single-line string | multi-line string
 
+      # OPTIONAL
+      # DEFAULT = The filesystem
+      # The source that will be globbed/searched by patterns/filter-patterns.
+      # If not supplied, the filesystem will be globbed/searched. If supplied,
+      # must be a list of filepaths
+      source: single-line string | multi-line string
+
       # OPTIONAL (only valid if `root-patterns` is specified)
       # DEFAULT = **
       # The pattern(s) to be used to find files/folders to provide to
