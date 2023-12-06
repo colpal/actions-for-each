@@ -83,6 +83,26 @@ jobs:
         run: exit 1
 
       - name: Run colpal/actions-for-each
+        id: for-each-8
+        uses: ./
+        with:
+          patterns: |
+            banana/*
+          source: '["banana/a.txt","banana/b.txt","apple/a.txt"]'
+      - if: steps.for-each-8.outputs.matches != '["banana/a.txt","banana/b.txt"]'
+        run: exit 1
+
+      - name: Run colpal/actions-for-each
+        id: for-each-9
+        uses: ./
+        with:
+          patterns: |
+            **/a.txt
+          source: '["banana/a.txt","banana/b.txt","apple/a.txt"]'
+      - if: steps.for-each-8.outputs.matches != '["banana/a.txt","apple/a.txt"]'
+        run: exit 1
+
+      - name: Run colpal/actions-for-each
         id: for-each
         uses: ./
         with:
