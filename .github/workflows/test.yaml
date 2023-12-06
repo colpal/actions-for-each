@@ -99,7 +99,7 @@ jobs:
           patterns: |
             **/a.txt
           source: '["banana/a.txt","banana/b.txt","apple/a.txt"]'
-      - if: steps.for-each-8.outputs.matches != '["banana/a.txt","apple/a.txt"]'
+      - if: steps.for-each-9.outputs.matches != '["banana/a.txt","apple/a.txt"]'
         run: exit 1
 
       - name: Run colpal/actions-for-each
