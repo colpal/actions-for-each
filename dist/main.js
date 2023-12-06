@@ -20391,7 +20391,7 @@ var require_scan = __commonJS({
       }
       let base = str;
       let prefix = "";
-      let glob = "";
+      let glob2 = "";
       if (start > 0) {
         prefix = str.slice(0, start);
         str = str.slice(start);
@@ -20399,10 +20399,10 @@ var require_scan = __commonJS({
       }
       if (base && isGlob === true && lastIndex > 0) {
         base = str.slice(0, lastIndex);
-        glob = str.slice(lastIndex);
+        glob2 = str.slice(lastIndex);
       } else if (isGlob === true) {
         base = "";
-        glob = str;
+        glob2 = str;
       } else {
         base = str;
       }
@@ -20412,8 +20412,8 @@ var require_scan = __commonJS({
         }
       }
       if (opts.unescape === true) {
-        if (glob)
-          glob = utils.removeBackslashes(glob);
+        if (glob2)
+          glob2 = utils.removeBackslashes(glob2);
         if (base && backslashes === true) {
           base = utils.removeBackslashes(base);
         }
@@ -20423,7 +20423,7 @@ var require_scan = __commonJS({
         input,
         start,
         base,
-        glob,
+        glob: glob2,
         isBrace,
         isBracket,
         isGlob,
@@ -21269,9 +21269,9 @@ var require_picomatch = __commonJS({
     var utils = require_utils4();
     var constants = require_constants6();
     var isObject = (val) => val && typeof val === "object" && !Array.isArray(val);
-    var picomatch = (glob, options, returnState = false) => {
-      if (Array.isArray(glob)) {
-        const fns = glob.map((input) => picomatch(input, options, returnState));
+    var picomatch = (glob2, options, returnState = false) => {
+      if (Array.isArray(glob2)) {
+        const fns = glob2.map((input) => picomatch(input, options, returnState));
         const arrayMatcher = (str) => {
           for (const isMatch of fns) {
             const state2 = isMatch(str);
@@ -21282,13 +21282,13 @@ var require_picomatch = __commonJS({
         };
         return arrayMatcher;
       }
-      const isState = isObject(glob) && glob.tokens && glob.input;
-      if (glob === "" || typeof glob !== "string" && !isState) {
+      const isState = isObject(glob2) && glob2.tokens && glob2.input;
+      if (glob2 === "" || typeof glob2 !== "string" && !isState) {
         throw new TypeError("Expected pattern to be a non-empty string");
       }
       const opts = options || {};
       const posix = utils.isWindows(options);
-      const regex = isState ? picomatch.compileRe(glob, options) : picomatch.makeRe(glob, options, false, true);
+      const regex = isState ? picomatch.compileRe(glob2, options) : picomatch.makeRe(glob2, options, false, true);
       const state = regex.state;
       delete regex.state;
       let isIgnored = () => false;
@@ -21297,8 +21297,8 @@ var require_picomatch = __commonJS({
         isIgnored = picomatch(opts.ignore, ignoreOpts, returnState);
       }
       const matcher = (input, returnObject = false) => {
-        const { isMatch, match, output } = picomatch.test(input, regex, options, { glob, posix });
-        const result = { glob, state, regex, posix, input, output, match, isMatch };
+        const { isMatch, match, output } = picomatch.test(input, regex, options, { glob: glob2, posix });
+        const result = { glob: glob2, state, regex, posix, input, output, match, isMatch };
         if (typeof opts.onResult === "function") {
           opts.onResult(result);
         }
@@ -21323,7 +21323,7 @@ var require_picomatch = __commonJS({
       }
       return matcher;
     };
-    picomatch.test = (input, regex, options, { glob, posix } = {}) => {
+    picomatch.test = (input, regex, options, { glob: glob2, posix } = {}) => {
       if (typeof input !== "string") {
         throw new TypeError("Expected input to be a string");
       }
@@ -21332,11 +21332,11 @@ var require_picomatch = __commonJS({
       }
       const opts = options || {};
       const format = opts.format || (posix ? utils.toPosixSlashes : null);
-      let match = input === glob;
+      let match = input === glob2;
       let output = match && format ? format(input) : input;
       if (match === false) {
         output = format ? format(input) : input;
-        match = output === glob;
+        match = output === glob2;
       }
       if (match === false || opts.capture === true) {
         if (opts.matchBase === true || opts.basename === true) {
@@ -21347,8 +21347,8 @@ var require_picomatch = __commonJS({
       }
       return { isMatch: Boolean(match), match, output };
     };
-    picomatch.matchBase = (input, glob, options, posix = utils.isWindows(options)) => {
-      const regex = glob instanceof RegExp ? glob : picomatch.makeRe(glob, options);
+    picomatch.matchBase = (input, glob2, options, posix = utils.isWindows(options)) => {
+      const regex = glob2 instanceof RegExp ? glob2 : picomatch.makeRe(glob2, options);
       return regex.test(path2.basename(input));
     };
     picomatch.isMatch = (str, patterns, options) => picomatch(patterns, options)(str);
@@ -21537,9 +21537,9 @@ var require_micromatch = __commonJS({
       }
       return [].concat(patterns).every((p) => picomatch(p, options)(str));
     };
-    micromatch2.capture = (glob, input, options) => {
+    micromatch2.capture = (glob2, input, options) => {
       let posix = utils.isWindows(options);
-      let regex = picomatch.makeRe(String(glob), { ...options, capture: true });
+      let regex = picomatch.makeRe(String(glob2), { ...options, capture: true });
       let match = regex.exec(posix ? utils.toPosixSlashes(input) : input);
       if (match) {
         return match.slice(1).map((v) => v === void 0 ? "" : v);
@@ -24729,8 +24729,14 @@ async function fsGlob(patterns) {
     onlyFiles: false
   });
 }
-async function directMatch(patterns) {
-  const matches = await fsGlob(patterns);
+function memGlob(patterns, source) {
+  return (0, import_micromatch.default)(source, patterns);
+}
+function glob(patterns, source = null) {
+  return source ? memGlob(patterns, source) : fsGlob(patterns);
+}
+async function directMatch(patterns, source) {
+  const matches = await glob(patterns, source);
   core.debug(JSON.stringify({ patterns, matches }, null, 2));
   core.setOutput("matches", matches);
 }
@@ -24756,10 +24762,15 @@ async function hoistMatch(rootPatterns, filterPatterns) {
   core.setOutput("matches", matches);
 }
 (async () => {
-  const { filterPatterns, patterns, rootPatterns } = getInputs();
+  const {
+    filterPatterns,
+    patterns,
+    rootPatterns,
+    source
+  } = getInputs();
   switch (true) {
     case !isEmpty(patterns):
-      directMatch(patterns);
+      directMatch(patterns, source);
       break;
     case !isEmpty(rootPatterns):
       hoistMatch(rootPatterns, filterPatterns);
