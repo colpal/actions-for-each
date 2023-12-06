@@ -24705,12 +24705,12 @@ function getInputs() {
   const filterPatterns = core.getMultilineInput("filter-patterns", {
     required: true
   });
-  let source;
+  let source = core.getInput("source") || null;
   try {
-    source = JSON.parse(core.getInput("source") || "[]");
+    source = JSON.parse(source);
   } catch (err) {
     throw new Error(
-      '"source" must be a JSON-formatted array of filepaths',
+      'If provided, "source" must be a JSON-formatted array of filepaths',
       { cause: err }
     );
   }
