@@ -56,7 +56,7 @@ function glob(patterns, source = null) {
 
 async function directMatch(patterns, source) {
   const matches = await glob(patterns, source);
-  core.debug(JSON.stringify({ patterns, matches }, null, 2));
+  core.debug(JSON.stringify({ patterns, matches, source }, null, 2));
   core.setOutput('matches', matches);
 }
 
