@@ -50,6 +50,10 @@ function memGlob(patterns, source) {
   return micromatch(source, patterns);
 }
 
+function glob(patterns, source = null) {
+  return source ? memGlob(patterns, source) : fsGlob(patterns);
+}
+
 async function directMatch(patterns) {
   const matches = await fsGlob(patterns);
   core.debug(JSON.stringify({ patterns, matches }, null, 2));
