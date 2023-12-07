@@ -130,3 +130,38 @@ outputs:
       **/main.sh
       **/start.sh
 ```
+
+### Build Docker contexts if they have changed
+
+```yaml
+jobs:
+  divide:
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - id: changed
+        uses: colpal/actions-changed-files@v3
+      - id: for-each
+        uses: colpal/actions-for-each@v0.1
+        with:
+          root-patterns: |
+            containers/*/
+          filter-patterns: |
+            containers/*/**
+          source: ${{ toJSON(fromJSON(steps.changed.outputs.json).all) }}
+    outputs:
+      matches: ${{ steps.for-each.outputs.matches }}
+
+  conquer:
+    needs: divide
+    strategy:
+      matrix:
+        path: ${{ fromJSON(needs.divide.outputs.matches) }}
+    defaults:
+      run:
+        working-directory: ./${{ matrix.path }}
+    steps:
+      - uses: actions/checkout@v4
+      - run: docker build
+```
