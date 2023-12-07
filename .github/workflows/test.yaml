@@ -14,96 +14,96 @@ jobs:
       - uses: actions/checkout@v4
 
       - name: Run colpal/actions-for-each
-        id: for-each-1
+        id: '1'
         uses: ./
         with:
           patterns: 'fixtures/*'
-      - if: steps.for-each-1.outputs.matches != '["fixtures/function-a/","fixtures/function-b/","fixtures/function-c/","fixtures/run-a/","fixtures/run-b/"]'
+      - if: steps.1.outputs.matches != '["fixtures/function-a/","fixtures/function-b/","fixtures/function-c/","fixtures/run-a/","fixtures/run-b/"]'
         run: exit 1
 
       - name: Run colpal/actions-for-each
-        id: for-each-2
+        id: '2'
         uses: ./
         with:
           patterns: |
             fixtures/*
             !fixtures/*-b
-      - if: steps.for-each-2.outputs.matches != '["fixtures/function-a/","fixtures/function-c/","fixtures/run-a/"]'
+      - if: steps.2.outputs.matches != '["fixtures/function-a/","fixtures/function-c/","fixtures/run-a/"]'
         run: exit 1
 
       - name: Run colpal/actions-for-each
-        id: for-each-3
+        id: '3'
         uses: ./
         with:
           patterns: |
             fixtures/**/file.txt
             !fixtures/function-*/**
-      - if: steps.for-each-3.outputs.matches != '["fixtures/run-a/file.txt","fixtures/run-b/file.txt"]'
+      - if: steps.3.outputs.matches != '["fixtures/run-a/file.txt","fixtures/run-b/file.txt"]'
         run: exit 1
 
       - name: Run colpal/actions-for-each
-        id: for-each-4
+        id: '4'
         uses: ./
         with:
           root-patterns: '*/'
           filter-patterns: '**/main.*'
-      - if: steps.for-each-4.outputs.matches != '["dist/"]'
+      - if: steps.4.outputs.matches != '["dist/"]'
         run: exit 1
 
       - name: Run colpal/actions-for-each
-        id: for-each-5
+        id: '5'
         uses: ./
         with:
           root-patterns: |
             ./
             **/
           filter-patterns: '**/main.*'
-      - if: steps.for-each-5.outputs.matches != '["./","dist/"]'
+      - if: steps.5.outputs.matches != '["./","dist/"]'
         run: exit 1
 
       - name: Run colpal/actions-for-each
-        id: for-each-6
+        id: '6'
         uses: ./
         with:
           root-patterns: |
             **/*-b/
           filter-patterns: '**/file.txt'
-      - if: steps.for-each-6.outputs.matches != '["fixtures/function-b/","fixtures/run-b/"]'
+      - if: steps.6.outputs.matches != '["fixtures/function-b/","fixtures/run-b/"]'
         run: exit 1
 
       - name: Run colpal/actions-for-each
-        id: for-each-7
+        id: '7'
         uses: ./
         with:
           root-patterns: |
             ./
           filter-patterns: |
             **/flie.txt
-      - if: steps.for-each-7.outputs.matches != '[]'
+      - if: steps.7.outputs.matches != '[]'
         run: exit 1
 
       - name: Run colpal/actions-for-each
-        id: for-each-8
+        id: '8'
         uses: ./
         with:
           patterns: |
             banana/*
           source: '["banana/a.txt","banana/b.txt","apple/a.txt"]'
-      - if: steps.for-each-8.outputs.matches != '["banana/a.txt","banana/b.txt"]'
+      - if: steps.8.outputs.matches != '["banana/a.txt","banana/b.txt"]'
         run: exit 1
 
       - name: Run colpal/actions-for-each
-        id: for-each-9
+        id: '9'
         uses: ./
         with:
           patterns: |
             **/a.txt
           source: '["banana/a.txt","banana/b.txt","apple/a.txt"]'
-      - if: steps.for-each-9.outputs.matches != '["banana/a.txt","apple/a.txt"]'
+      - if: steps.9.outputs.matches != '["banana/a.txt","apple/a.txt"]'
         run: exit 1
 
       - name: Run colpal/actions-for-each
-        id: for-each-10
+        id: '10'
         uses: ./
         with:
           root-patterns: |
@@ -112,7 +112,7 @@ jobs:
           filter-patterns: |
             **/b.txt
           source: '["banana/a.txt","banana/b.txt","apple/a.txt"]'
-      - if: steps.for-each-10.outputs.matches != '["banana/"]'
+      - if: steps.10.outputs.matches != '["banana/"]'
         run: exit 1
 
       - name: Run colpal/actions-for-each
