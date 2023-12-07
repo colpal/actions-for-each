@@ -133,6 +133,19 @@ outputs:
 
 ### Build Docker contexts
 
+```
+.
+└── containers
+    ├── container-a
+    │   ├── Dockerfile
+    │   ├── main.py
+    │   └── requirements.txt
+    └── container-b
+        ├── Dockerfile
+        ├── main.js
+        └── package.json
+```
+
 ```yaml
 jobs:
   divide:
@@ -162,6 +175,19 @@ jobs:
 ```
 
 ### Build Docker contexts if they have changed
+
+```
+.
+└── containers
+    ├── container-a
+    │   ├── Dockerfile
+    │   ├── main.py
+    │   └── requirements.txt
+    └── container-b
+        ├── Dockerfile
+        ├── main.js
+        └── package.json
+```
 
 ```yaml
 jobs:
