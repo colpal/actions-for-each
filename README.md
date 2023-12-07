@@ -131,6 +131,36 @@ outputs:
       **/start.sh
 ```
 
+### Build Docker contexts
+
+```yaml
+jobs:
+  divide:
+    steps:
+      - uses: actions/checkout@v4
+      - id: for-each
+        uses: colpal/actions-for-each@v0.1
+        with:
+          root-patterns: |
+            containers/*/
+          filter-patterns: |
+            containers/*/**
+    outputs:
+      matches: ${{ steps.for-each.outputs.matches }}
+
+  conquer:
+    needs: divide
+    strategy:
+      matrix:
+        path: ${{ fromJSON(needs.divide.outputs.matches) }}
+    defaults:
+      run:
+        working-directory: ./${{ matrix.path }}
+    steps:
+      - uses: actions/checkout@v4
+      - run: docker build
+```
+
 ### Build Docker contexts if they have changed
 
 ```yaml
