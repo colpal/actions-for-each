@@ -1,4 +1,4 @@
-name: For Each
+name: Find Exec
 description: Create "matrix" compliant file/folder lists using patterns
 inputs:
   patterns:
