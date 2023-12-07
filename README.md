@@ -80,6 +80,13 @@ steps:
       # may be supplied by putting each on its own line.
       patterns: single-line string | multi-line string
 
+      # OPTIONAL
+      # DEFAULT = The filesystem
+      # The source that will be globbed/searched by patterns/filter-patterns.
+      # If not supplied, the filesystem will be globbed/searched. If supplied,
+      # must be a list of filepaths
+      source: JSON-formatted array of strings
+
       # OPTIONAL (only valid if `root-patterns` is specified)
       # DEFAULT = **
       # The pattern(s) to be used to find files/folders to provide to
@@ -122,4 +129,95 @@ outputs:
     filter-patterns: |
       **/main.sh
       **/start.sh
+```
+
+### Build Docker contexts
+
+```
+.
+└── containers
+    ├── container-a
+    │   ├── Dockerfile
+    │   ├── main.py
+    │   └── requirements.txt
+    └── container-b
+        ├── Dockerfile
+        ├── main.js
+        └── package.json
+```
+
+```yaml
+jobs:
+  divide:
+    steps:
+      - uses: actions/checkout@v4
+      - id: for-each
+        uses: colpal/actions-for-each@v0.1
+        with:
+          root-patterns: |
+            containers/*/
+          filter-patterns: |
+            containers/*/**
+    outputs:
+      matches: ${{ steps.for-each.outputs.matches }}
+
+  conquer:
+    needs: divide
+    strategy:
+      matrix:
+        path: ${{ fromJSON(needs.divide.outputs.matches) }}
+    defaults:
+      run:
+        working-directory: ./${{ matrix.path }}
+    steps:
+      - uses: actions/checkout@v4
+      - run: docker build
+```
+
+### Build Docker contexts if they have changed
+
+```
+.
+└── containers
+    ├── container-a
+    │   ├── Dockerfile
+    │   ├── main.py
+    │   └── requirements.txt
+    └── container-b
+        ├── Dockerfile
+        ├── main.js
+        └── package.json
+```
+
+```yaml
+jobs:
+  divide:
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - id: changed
+        uses: colpal/actions-changed-files@v3
+      - id: for-each
+        uses: colpal/actions-for-each@v0.1
+        with:
+          root-patterns: |
+            containers/*/
+          filter-patterns: |
+            containers/*/**
+          source: ${{ toJSON(fromJSON(steps.changed.outputs.json).all) }}
+    outputs:
+      matches: ${{ steps.for-each.outputs.matches }}
+
+  conquer:
+    needs: divide
+    strategy:
+      matrix:
+        path: ${{ fromJSON(needs.divide.outputs.matches) }}
+    defaults:
+      run:
+        working-directory: ./${{ matrix.path }}
+    steps:
+      - uses: actions/checkout@v4
+      - run: docker build
 ```

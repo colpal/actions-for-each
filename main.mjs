@@ -20,7 +20,21 @@ function getInputs() {
   const filterPatterns = core.getMultilineInput('filter-patterns', {
     required: true,
   });
-  return { patterns, rootPatterns, filterPatterns };
+  let source = core.getInput('source') || null;
+  try {
+    source = JSON.parse(source);
+  } catch (err) {
+    throw new Error(
+      'If provided, "source" must be a JSON-formatted array of filepaths',
+      { cause: err },
+    );
+  }
+  return {
+    patterns,
+    rootPatterns,
+    filterPatterns,
+    source,
+  };
 }
 
 async function fsGlob(patterns) {
@@ -32,9 +46,17 @@ async function fsGlob(patterns) {
   });
 }
 
-async function directMatch(patterns) {
-  const matches = await fsGlob(patterns);
-  core.debug(JSON.stringify({ patterns, matches }, null, 2));
+function memGlob(patterns, source) {
+  return micromatch(source, patterns);
+}
+
+function glob(patterns, source = null) {
+  return source ? memGlob(patterns, source) : fsGlob(patterns);
+}
+
+async function directMatch(patterns, source) {
+  const matches = await glob(patterns, source);
+  core.debug(JSON.stringify({ patterns, matches, source }, null, 2));
   core.setOutput('matches', matches);
 }
 
@@ -51,26 +73,32 @@ function hoist(rootPatterns, paths) {
   return Array.from(new Set(roots));
 }
 
-async function hoistMatch(rootPatterns, filterPatterns) {
-  const fromFilters = await fsGlob(filterPatterns);
+async function hoistMatch(rootPatterns, filterPatterns, source) {
+  const fromFilters = await glob(filterPatterns, source);
   const matches = hoist(rootPatterns, fromFilters);
   core.debug(JSON.stringify({
     rootPatterns,
     filterPatterns,
     fromFilters,
     matches,
+    source,
   }, null, 2));
   core.setOutput('matches', matches);
 }
 
 (async () => {
-  const { filterPatterns, patterns, rootPatterns } = getInputs();
+  const {
+    filterPatterns,
+    patterns,
+    rootPatterns,
+    source,
+  } = getInputs();
   switch (true) {
     case !isEmpty(patterns):
-      directMatch(patterns);
+      directMatch(patterns, source);
       break;
     case !isEmpty(rootPatterns):
-      hoistMatch(rootPatterns, filterPatterns);
+      hoistMatch(rootPatterns, filterPatterns, source);
       break;
     default:
       throw new Error('Unreachable');

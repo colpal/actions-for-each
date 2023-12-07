@@ -11,6 +11,11 @@ inputs:
     description: >
       The pattern(s) that will be used to filter (but not match) files/folders
     default: '**'
+  source:
+    description: >
+      The source to which `patterns` or `filter-patterns` will be applied. If
+      not provided, the filesystem will be used. If provided, it must be a
+      JSON-formatted array of file/folder paths
 outputs:
   matches:
     description: The files/folders that matched the pattern
