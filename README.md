@@ -1,4 +1,4 @@
-# For Each
+# Find Exec
 
 Glob the filesystem to create `matrix` definitions for parallel jobs. This
 action uses [globby](https://github.com/sindresorhus/globby) under the hood
@@ -18,13 +18,13 @@ steps:
     # │   └── file.txt
     # └── other-folder
     #     └── file.txt
-  - id: for-each
-    uses: colpal/actions-for-each@v0.1
+  - id: find-exec
+    uses: colpal/actions-find-exec@v0.1
     with:
       patterns: |
         **/file.txt
         !other-folder/*
-  - run: echo ${{ steps.for-each.outputs.matches }}
+  - run: echo ${{ steps.find-exec.outputs.matches }}
     # ["function-a/file.txt","function-b/file.txt"]
 ```
 
@@ -46,13 +46,13 @@ jobs:
         # └── other-folder
         #     ├── main.js
         #     └── deploy.sh
-      - id: for-each
-        uses: colpal/actions-for-each@v0.1
+      - id: find-exec
+        uses: colpal/actions-find-exec@v0.1
         with:
           patterns: 'function-*'
     outputs:
       # ["function-a/", "function-b/"]
-      matches: ${{ steps.for-each.outputs.matches }}
+      matches: ${{ steps.find-exec.outputs.matches }}
 
   conquer:
     needs: divide
@@ -72,8 +72,8 @@ For more details on the supported patterns, see
 
 ```yaml
 steps:
-  - id: for-each
-    uses: colpal/actions-for-each@v0.1
+  - id: find-exec
+    uses: colpal/actions-find-exec@v0.1
     with:
       # REQUIRED (if `root-patterns` is not specified)
       # The pattern(s) to be used to find folders/files. More than one pattern
@@ -113,7 +113,7 @@ steps:
       root-patterns: single-line string | multi-line string
 outputs:
   # An JSON-formatted array of paths that matched the pattern(s)
-  matches: ${{ steps.for-each.outputs.matches }}
+  matches: ${{ steps.find-exec.outputs.matches }}
 ```
 
 ## Recipes
@@ -121,7 +121,7 @@ outputs:
 ### Find all folders that contain certain files
 
 ```yaml
-- uses: colpal/actions-for-each@v0.1
+- uses: colpal/actions-find-exec@v0.1
   with:
     root-patterns: |
       ./
@@ -151,15 +151,15 @@ jobs:
   divide:
     steps:
       - uses: actions/checkout@v4
-      - id: for-each
-        uses: colpal/actions-for-each@v0.1
+      - id: find-exec
+        uses: colpal/actions-find-exec@v0.1
         with:
           root-patterns: |
             containers/*/
           filter-patterns: |
             containers/*/**
     outputs:
-      matches: ${{ steps.for-each.outputs.matches }}
+      matches: ${{ steps.find-exec.outputs.matches }}
 
   conquer:
     needs: divide
@@ -198,8 +198,8 @@ jobs:
           fetch-depth: 0
       - id: changed
         uses: colpal/actions-changed-files@v3
-      - id: for-each
-        uses: colpal/actions-for-each@v0.1
+      - id: find-exec
+        uses: colpal/actions-find-exec@v0.1
         with:
           root-patterns: |
             containers/*/
@@ -207,7 +207,7 @@ jobs:
             containers/*/**
           source: ${{ toJSON(fromJSON(steps.changed.outputs.json).all) }}
     outputs:
-      matches: ${{ steps.for-each.outputs.matches }}
+      matches: ${{ steps.find-exec.outputs.matches }}
 
   conquer:
     needs: divide

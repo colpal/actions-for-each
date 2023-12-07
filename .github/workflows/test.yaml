@@ -9,11 +9,11 @@ jobs:
   main:
     runs-on: ubuntu-latest
     outputs:
-      matches: ${{ steps.for-each.outputs.matches }}
+      matches: ${{ steps.find-exec.outputs.matches }}
     steps:
       - uses: actions/checkout@v4
 
-      - name: Run colpal/actions-for-each
+      - name: Run colpal/actions-find-exec
         id: '1'
         uses: ./
         with:
@@ -21,7 +21,7 @@ jobs:
       - if: steps.1.outputs.matches != '["fixtures/function-a/","fixtures/function-b/","fixtures/function-c/","fixtures/run-a/","fixtures/run-b/"]'
         run: exit 1
 
-      - name: Run colpal/actions-for-each
+      - name: Run colpal/actions-find-exec
         id: '2'
         uses: ./
         with:
@@ -31,7 +31,7 @@ jobs:
       - if: steps.2.outputs.matches != '["fixtures/function-a/","fixtures/function-c/","fixtures/run-a/"]'
         run: exit 1
 
-      - name: Run colpal/actions-for-each
+      - name: Run colpal/actions-find-exec
         id: '3'
         uses: ./
         with:
@@ -41,7 +41,7 @@ jobs:
       - if: steps.3.outputs.matches != '["fixtures/run-a/file.txt","fixtures/run-b/file.txt"]'
         run: exit 1
 
-      - name: Run colpal/actions-for-each
+      - name: Run colpal/actions-find-exec
         id: '4'
         uses: ./
         with:
@@ -50,7 +50,7 @@ jobs:
       - if: steps.4.outputs.matches != '["dist/"]'
         run: exit 1
 
-      - name: Run colpal/actions-for-each
+      - name: Run colpal/actions-find-exec
         id: '5'
         uses: ./
         with:
@@ -61,7 +61,7 @@ jobs:
       - if: steps.5.outputs.matches != '["./","dist/"]'
         run: exit 1
 
-      - name: Run colpal/actions-for-each
+      - name: Run colpal/actions-find-exec
         id: '6'
         uses: ./
         with:
@@ -71,7 +71,7 @@ jobs:
       - if: steps.6.outputs.matches != '["fixtures/function-b/","fixtures/run-b/"]'
         run: exit 1
 
-      - name: Run colpal/actions-for-each
+      - name: Run colpal/actions-find-exec
         id: '7'
         uses: ./
         with:
@@ -82,7 +82,7 @@ jobs:
       - if: steps.7.outputs.matches != '[]'
         run: exit 1
 
-      - name: Run colpal/actions-for-each
+      - name: Run colpal/actions-find-exec
         id: '8'
         uses: ./
         with:
@@ -92,7 +92,7 @@ jobs:
       - if: steps.8.outputs.matches != '["banana/a.txt","banana/b.txt"]'
         run: exit 1
 
-      - name: Run colpal/actions-for-each
+      - name: Run colpal/actions-find-exec
         id: '9'
         uses: ./
         with:
@@ -102,7 +102,7 @@ jobs:
       - if: steps.9.outputs.matches != '["banana/a.txt","apple/a.txt"]'
         run: exit 1
 
-      - name: Run colpal/actions-for-each
+      - name: Run colpal/actions-find-exec
         id: '10'
         uses: ./
         with:
@@ -115,8 +115,8 @@ jobs:
       - if: steps.10.outputs.matches != '["banana/"]'
         run: exit 1
 
-      - name: Run colpal/actions-for-each
-        id: for-each
+      - name: Run colpal/actions-find-exec
+        id: find-exec
         uses: ./
         with:
           patterns: 'fixtures/run-*'
