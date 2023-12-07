@@ -14,96 +14,96 @@ jobs:
       - uses: actions/checkout@v4
 
       - name: Run colpal/actions-find-exec
-        id: '1'
+        id: _1
         uses: ./
         with:
           patterns: 'fixtures/*'
-      - if: steps.1.outputs.matches != '["fixtures/function-a/","fixtures/function-b/","fixtures/function-c/","fixtures/run-a/","fixtures/run-b/"]'
+      - if: steps._1.outputs.matches != '["fixtures/function-a/","fixtures/function-b/","fixtures/function-c/","fixtures/run-a/","fixtures/run-b/"]'
         run: exit 1
 
       - name: Run colpal/actions-find-exec
-        id: '2'
+        id: _2
         uses: ./
         with:
           patterns: |
             fixtures/*
             !fixtures/*-b
-      - if: steps.2.outputs.matches != '["fixtures/function-a/","fixtures/function-c/","fixtures/run-a/"]'
+      - if: steps._2.outputs.matches != '["fixtures/function-a/","fixtures/function-c/","fixtures/run-a/"]'
         run: exit 1
 
       - name: Run colpal/actions-find-exec
-        id: '3'
+        id: _3
         uses: ./
         with:
           patterns: |
             fixtures/**/file.txt
             !fixtures/function-*/**
-      - if: steps.3.outputs.matches != '["fixtures/run-a/file.txt","fixtures/run-b/file.txt"]'
+      - if: steps._3.outputs.matches != '["fixtures/run-a/file.txt","fixtures/run-b/file.txt"]'
         run: exit 1
 
       - name: Run colpal/actions-find-exec
-        id: '4'
+        id: _4
         uses: ./
         with:
           root-patterns: '*/'
           filter-patterns: '**/main.*'
-      - if: steps.4.outputs.matches != '["dist/"]'
+      - if: steps._4.outputs.matches != '["dist/"]'
         run: exit 1
 
       - name: Run colpal/actions-find-exec
-        id: '5'
+        id: _5
         uses: ./
         with:
           root-patterns: |
             ./
             **/
           filter-patterns: '**/main.*'
-      - if: steps.5.outputs.matches != '["./","dist/"]'
+      - if: steps._5.outputs.matches != '["./","dist/"]'
         run: exit 1
 
       - name: Run colpal/actions-find-exec
-        id: '6'
+        id: _6
         uses: ./
         with:
           root-patterns: |
             **/*-b/
           filter-patterns: '**/file.txt'
-      - if: steps.6.outputs.matches != '["fixtures/function-b/","fixtures/run-b/"]'
+      - if: steps._6.outputs.matches != '["fixtures/function-b/","fixtures/run-b/"]'
         run: exit 1
 
       - name: Run colpal/actions-find-exec
-        id: '7'
+        id: _7
         uses: ./
         with:
           root-patterns: |
             ./
           filter-patterns: |
             **/flie.txt
-      - if: steps.7.outputs.matches != '[]'
+      - if: steps._7.outputs.matches != '[]'
         run: exit 1
 
       - name: Run colpal/actions-find-exec
-        id: '8'
+        id: _8
         uses: ./
         with:
           patterns: |
             banana/*
           source: '["banana/a.txt","banana/b.txt","apple/a.txt"]'
-      - if: steps.8.outputs.matches != '["banana/a.txt","banana/b.txt"]'
+      - if: steps._8.outputs.matches != '["banana/a.txt","banana/b.txt"]'
         run: exit 1
 
       - name: Run colpal/actions-find-exec
-        id: '9'
+        id: _9
         uses: ./
         with:
           patterns: |
             **/a.txt
           source: '["banana/a.txt","banana/b.txt","apple/a.txt"]'
-      - if: steps.9.outputs.matches != '["banana/a.txt","apple/a.txt"]'
+      - if: steps._9.outputs.matches != '["banana/a.txt","apple/a.txt"]'
         run: exit 1
 
       - name: Run colpal/actions-find-exec
-        id: '10'
+        id: _10
         uses: ./
         with:
           root-patterns: |
@@ -112,7 +112,7 @@ jobs:
           filter-patterns: |
             **/b.txt
           source: '["banana/a.txt","banana/b.txt","apple/a.txt"]'
-      - if: steps.10.outputs.matches != '["banana/"]'
+      - if: steps._10.outputs.matches != '["banana/"]'
         run: exit 1
 
       - name: Run colpal/actions-find-exec
