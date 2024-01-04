@@ -12,4 +12,4 @@ jobs:
           json: true
           escape_json: false
 
-      - run: echo ${{ steps.changed.outputs.all_changed }}
+      - run: echo ${{ steps.changed.outputs.all_changed_files }}
