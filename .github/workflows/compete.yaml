@@ -1,0 +1,15 @@
+on: pull_request
+
+jobs:
+  main:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - id: changed
+        uses: tj-actions/changed-files@v41
+        with:
+          json: true
+          escape_json: false
+
+      - run: echo ${{ steps.changed.outputs.all_changed }}
