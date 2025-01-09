@@ -18,7 +18,7 @@ jobs:
         uses: ./
         with:
           patterns: 'fixtures/*'
-      - if: steps._1.outputs.matches != '["fixtures/function-a/","fixtures/function-b/","fixtures/function-c/","fixtures/run-a/","fixtures/run-b/"]'
+      - if: steps._1.outputs.matches != '["fixtures/function-a","fixtures/function-b","fixtures/function-c","fixtures/run-a","fixtures/run-b"]'
         run: exit 1
 
       - name: Run colpal/actions-find-exec
@@ -28,7 +28,7 @@ jobs:
           patterns: |
             fixtures/*
             !fixtures/*-b
-      - if: steps._2.outputs.matches != '["fixtures/function-a/","fixtures/function-c/","fixtures/run-a/"]'
+      - if: steps._2.outputs.matches != '["fixtures/function-a","fixtures/function-c","fixtures/run-a"]'
         run: exit 1
 
       - name: Run colpal/actions-find-exec
@@ -47,7 +47,7 @@ jobs:
         with:
           root-patterns: '*/'
           filter-patterns: '**/main.*'
-      - if: steps._4.outputs.matches != '["dist/"]'
+      - if: steps._4.outputs.matches != '["dist"]'
         run: exit 1
 
       - name: Run colpal/actions-find-exec
@@ -58,7 +58,7 @@ jobs:
             ./
             **/
           filter-patterns: '**/main.*'
-      - if: steps._5.outputs.matches != '["./","dist/"]'
+      - if: steps._5.outputs.matches != '[".","dist"]'
         run: exit 1
 
       - name: Run colpal/actions-find-exec
@@ -68,7 +68,7 @@ jobs:
           root-patterns: |
             **/*-b/
           filter-patterns: '**/file.txt'
-      - if: steps._6.outputs.matches != '["fixtures/function-b/","fixtures/run-b/"]'
+      - if: steps._6.outputs.matches != '["fixtures/function-b","fixtures/run-b"]'
         run: exit 1
 
       - name: Run colpal/actions-find-exec
@@ -112,7 +112,7 @@ jobs:
           filter-patterns: |
             **/b.txt
           source: '["banana/a.txt","banana/b.txt","apple/a.txt"]'
-      - if: steps._10.outputs.matches != '["banana/"]'
+      - if: steps._10.outputs.matches != '["banana"]'
         run: exit 1
 
       - name: Run colpal/actions-find-exec
