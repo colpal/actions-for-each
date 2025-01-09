@@ -24725,7 +24725,6 @@ async function fsGlob(patterns) {
   return globby(patterns, {
     expandDirectories: false,
     gitignore: true,
-    markDirectories: true,
     onlyFiles: false
   });
 }
